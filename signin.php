@@ -1,5 +1,6 @@
 <?php 
-require 'header.php';
+include 'header.php';
+require 'functions.php';
 
 $username = '';
 $failType = '';
@@ -36,3 +37,5 @@ if(isset($_GET['username'])) {
 		<a href="mailto:<?php echo SUPPORT_EMAIL; ?>">Support</a>
 	</div>
 </div>
+
+<?php include 'footer.php';?>

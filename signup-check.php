@@ -1,5 +1,6 @@
 <?php
-require ('functions.php');
+include 'header.php';
+require 'functions.php';
 
 //Setup variables
 $username = $_POST["username"];
@@ -8,6 +9,7 @@ $passwordconfirm = $_POST['passwordconfirm'];
 $email = $_POST['email'];
 $accountLock = '1';
 $accountCreationDate = date('Y-m-d H:i:s');
+$emailhash = md5( rand(0,10000) ); // Generate random 32 character hash
 
 //Return to signup page with error.
 if($username == '' || $password == '' || $passwordconfirm == '' || $email == '') {
@@ -22,13 +24,30 @@ if($username == '' || $password == '' || $passwordconfirm == '' || $email == '')
 
 //Put new user in database, accountLock set to 1.
 $conn = databaseConnect('write');
-$sql = "INSERT INTO users (username, password, email, accountLock, accountCreationDate) 
-		VALUES (?, ?, ?, ?, ?)";
+$sql = "INSERT INTO users (username, password, email, accountLock, accountCreationDate, emailhash) 
+		VALUES (?, ?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->execute(array($username, $password, $email, $accountLock, $accountCreationDate));
+$stmt->execute(array($username, $password, $email, $accountLock, $accountCreationDate, $emailhash));
 $stmt->closeCursor();
 
-//Send email to user with some way to set accountLock to 0.
-//A way to resend email.
+$subject = 'New User Created - Please Verify Email';
+$message = '
 
-//Go to another page
+Thanks for signing up as ' . $username . '! Please click the following link to activate your account.
+
+<a href="http://localhost/verify.php?email='.$email.'&emailhash='.$emailhash.'">http://www.yourwebsite.com/verify.php?email='.$email.'&emailhash='.$emailhash.'</a>
+
+';
+
+
+$from = 'SUPPORT_EMAIL';
+$headers = "From:" . $from;
+mail($email,$subject,$message,$headers);
+
+?>
+
+<!-- put successful page info here -->
+<p>You'll get a verification email to enable your new account.</p>
+<p>Didn't get it? Check your spam box or <a href="reset.php">resend verification email</a>.</p>
+
+<?php include 'footer.php';?>

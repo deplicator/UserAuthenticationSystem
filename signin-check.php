@@ -29,6 +29,6 @@ if(userCheck($username) === false) {
 	updateLoginCount($username);
 }
 
-//cookie is not being created, fix that
+//cookie is not working right, fix that
 
 //

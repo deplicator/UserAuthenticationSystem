@@ -1,4 +1,10 @@
 <?php
+/*
+ * It would be ideal to use sepereate creditals for readonly and write access,
+ * but I haven't done that yet.
+ * 
+ * Get your own random passwords!
+ */
 define('DATABASEHOST', 'localhost');
 define('DATABASE_NAME', 'userlogin');
 define('DATABASE_READONLY_USER', 'userlogin');
@@ -6,6 +12,11 @@ define('DATABASE_READONLY_PASSWORD', 'uJQuRqEuR');
 define('DATABASE_WRITE_USER', 'userlogin');
 define('DATABASE_WRITE_PASSWORD', 'uJQuRqEuR');
 define('SUPPORT_EMAIL', 'support@anemailaddress.com');
+
+/*
+ * Connect to database, read only by default; write if specified in the 
+ * parameters. This function also catches errors and puts them in a text file.
+ */
 
 function databaseConnect($how = 'readonly') {
 	$DSN = 'mysql:host=' . DATABASEHOST . ';dbname=' . DATABASE_NAME;
@@ -57,6 +68,10 @@ function failType($fail) {
 		case 'invalidemail':
 			$failType = 'Invalid email address.';
 			break;
+			
+		case 'verified':
+			$failType = 'Account verified you can sign in.';
+			break;
 
 		default:
 			$failType = 'unknown error';
@@ -91,6 +106,27 @@ function passwordCheck($username, $password) {
 	}
 }
 
+function emailCheck($email, $emailhash) {
+	$conn = databaseConnect();
+	$sql = "SELECT emailhash FROM users WHERE email = '$email'";
+	$stmt = $conn->query($sql);
+	$result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+	if($result['emailhash'] === $emailhash) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function emailVerified($email) {
+	$conn = databaseConnect('write');
+	$sql = "UPDATE users SET accountLock = ? WHERE email = ?";
+	$stmt = $conn->prepare($sql);
+	$stmt->execute(array('0', $email));
+	$stmt->closeCursor();
+}
+
 function updateLoginCount($username) {
 	$conn = databaseConnect();
 	$sql = "SELECT loginCount FROM users WHERE username = '$username' LIMIT 1";
@@ -121,6 +157,8 @@ function updateLoginAttempt($username, $reset = false) {
 	}
 	$conn = null;
 }
+
+
 
 /*
 class Encryption {

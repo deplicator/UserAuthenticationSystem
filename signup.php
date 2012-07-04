@@ -1,5 +1,6 @@
 <?php 
-require 'header.php';
+include 'header.php';
+require 'functions.php';
 
 $failType = '';
 
@@ -36,8 +37,10 @@ if(isset($_GET['fail'])){
 		<input id="submit" type="submit" value="Submit"/>
 	</form>
 	<div id="signin-menu">
-		<a href="">Back</a>
-		<a href="./reset.php">Reset</a>
+		<a href="signin.php">Sign in</a>
+		<a href="reset.php">Reset</a>
 		<a href="mailto:<?php echo $support; ?>">Support</a>
 	</div>
 </div>
+
+<?php include 'footer.php';?>
