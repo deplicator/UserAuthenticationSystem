@@ -8,5 +8,3 @@ if(isset($_SESSION['username'])) {
 } else {
 	echo 'no';
 }
-
-updateLoginAttempt('James', true);
