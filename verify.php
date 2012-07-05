@@ -14,7 +14,7 @@ if(!isset($_GET['email']) || !isset($_GET['emailhash'])) {
 	$emailhash = $_GET['emailhash'];
 }
 
-if(emailCheck($email, $emailhash) === true) {
+if(emailhashCheck($email, $emailhash) === true) {
 	emailVerified($email);
 	header("Location:signin.php?fail=verified");
 } else {

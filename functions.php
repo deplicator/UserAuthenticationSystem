@@ -106,13 +106,26 @@ function passwordCheck($username, $password) {
 	}
 }
 
-function emailCheck($email, $emailhash) {
+function emailhashCheck($email, $emailhash) {
 	$conn = databaseConnect();
 	$sql = "SELECT emailhash FROM users WHERE email = '$email'";
 	$stmt = $conn->query($sql);
 	$result = $stmt->fetch(PDO::FETCH_ASSOC);
 
 	if($result['emailhash'] === $emailhash) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function emailCheck($email) {
+	$conn = databaseConnect();
+	$sql = "SELECT email FROM users WHERE email = '$email'";
+	$stmt = $conn->query($sql);
+	$result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+	if($result['email'] === $email) {
 		return true;
 	} else {
 		return false;

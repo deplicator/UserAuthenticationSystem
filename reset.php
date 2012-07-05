@@ -3,6 +3,7 @@ include 'header.php';
 require 'functions.php';
 
 $username = '';
+$email = '';
 $failType = '';
 
 if(isset($_GET['username']) || isset($_GET['email'])) {
@@ -10,13 +11,22 @@ if(isset($_GET['username']) || isset($_GET['email'])) {
 	$email = $_GET['email'];
 	
 	if($_GET['username'] == '' || $_GET['email'] == '') {
-		//add ?failtype=blank to url somehow
+		//add fail message
+		//echo $_SERVER["REQUEST_URI"];
 	}
 }
 
 if(isset($_GET['fail'])) {
 	$failType = failType($_GET['fail']);
 }
+
+if(userCheck($username) == true || emailCheck($email) == true) {
+	
+}
+
+var_dump(userCheck($username));
+var_dump(emailCheck($email));
+
 ?>
 
 <div id="signin">
