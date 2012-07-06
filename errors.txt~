@@ -1,0 +1,19 @@
+2012-06-22 19:01:16 - Function: databaseConnectReadOnly - SQLSTATE[42000] [1044] Access denied for user 'userlogin'@'localhost' to database 'userlogin1'
+2012-06-26 18:19:26 - Function: databaseConnect - SQLSTATE[HY000] [2005] Unknown MySQL server host 'DATABASEHOST' (2)
+2012-06-26 18:20:54 - Function: databaseConnect - SQLSTATE[HY000] [2005] Unknown MySQL server host 'DATABASEHOST' (2)
+2012-06-26 18:20:55 - Function: databaseConnect - SQLSTATE[HY000] [2005] Unknown MySQL server host 'DATABASEHOST' (2)
+2012-06-26 18:22:08 - Function: databaseConnect - SQLSTATE[HY000] [2005] Unknown MySQL server host 'DATABASEHOST' (2)
+2012-06-26 18:33:12 - Function: databaseConnect - SQLSTATE[HY000] [2005] Unknown MySQL server host 'DATABASEHOST' (2)
+2012-06-26 18:33:25 - Function: databaseConnect - SQLSTATE[HY000] [2005] Unknown MySQL server host 'DATABASEHOST' (2)
+2012-06-26 18:38:50 - Function: databaseConnectReadOnly - invalid data source name
+2012-06-26 18:40:06 - Function: databaseConnectnew - SQLSTATE[HY000] [2005] Unknown MySQL server host 'DATABASEHOST' (2)
+2012-06-26 18:40:50 - Function: databaseConnectnew - SQLSTATE[HY000] [2005] Unknown MySQL server host 'DATABASEHOST' (2)
+2012-06-26 18:40:50 - Function: databaseConnectnew - SQLSTATE[HY000] [2005] Unknown MySQL server host 'DATABASEHOST' (2)
+2012-06-26 18:50:51 - Function: databaseConnectnew - SQLSTATE[HY000] [2005] Unknown MySQL server host 'DATABASEHOST' (2)
+2012-06-26 19:16:38 - Function: databaseConnectnew - SQLSTATE[HY000] [2005] Unknown MySQL server host '$host' (2)
+2012-06-26 19:16:56 - Function: databaseConnectnew - SQLSTATE[HY000] [2005] Unknown MySQL server host '$host' (2)
+2012-06-26 19:17:49 - Function: databaseConnectnew - SQLSTATE[HY000] [2005] Unknown MySQL server host '$host' (2)
+2012-06-26 19:18:03 - Function: databaseConnectnew - SQLSTATE[HY000] [2005] Unknown MySQL server host '$host' (2)
+2012-06-26 19:21:23 - Function: databaseConnectnew - SQLSTATE[HY000] [2005] Unknown MySQL server host 'DATABASEHOST' (2)
+2012-06-26 19:24:51 - Function: databaseConnectnew - SQLSTATE[HY000] [2005] Unknown MySQL server host 'DATABASEHOST' (2)
+2012-06-26 19:30:49 - Function: databaseConnectnew - Invalid Parameter.

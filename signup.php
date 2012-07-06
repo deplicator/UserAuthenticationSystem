@@ -13,7 +13,7 @@ if(isset($_GET['fail'])){
 <div id="signin">
 <h2>Sign up</h2>
 	<p><?php echo $failType; ?></p>
-	<form action="signup-check.php" method="POST">
+	<form action="./include/check.php" method="POST">
 		<div id="username">
 			<label for="username">Username</label>
 			<input type="text" name="username" size="20" spellcheck="false" />
@@ -33,7 +33,7 @@ if(isset($_GET['fail'])){
 			<label for="email">email</label>
 			<input type="text" name="email" size="20" spellcheck="false" />
 		</div>
-		<input type="hidden" value="newuser">
+		<input type="hidden" name="from" value="signip" />
 		<input id="submit" type="submit" value="Submit"/>
 	</form>
 	<div id="signin-menu">
