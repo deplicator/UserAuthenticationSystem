@@ -32,3 +32,11 @@ It's crude, still needs a lot of work. I'm uploading it so I can play with git.
 
 ===Password requirements===
 So often I find my auto-generated KeePass password is more secure, but doesn't contain a special character or some crap, just let me use what I want. At most a website should only set a limit on how short a password is (not how long!).
+
+==Interesting Reading==
+* http://stackoverflow.com/questions/549/the-definitive-guide-to-forms-based-website-authentication/
+* http://en.wikipedia.org/wiki/Password_strength#NIST_Special_Publication_800-63
+* http://cubicspot.blogspot.com/2012/01/how-to-calculate-password-strength-part.html
+* http://www.lockdown.co.uk/?pg=combi&s=articles
+* http://xato.net/
+* https://xato.net/passwords/more-top-worst-passwords/
