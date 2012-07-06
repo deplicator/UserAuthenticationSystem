@@ -10,7 +10,10 @@ It's crude, still needs a lot of work. I'm uploading it so I can play with git.
 * user account pages
 * creation of admin accounts
 * SQL statement for database setup and initial admin user
-
+* enable password encryption
+** ''would be neat'': don't let users use a password from this list http://www.whatsmypass.com/the-top-500-worst-passwords-of-all-time
+* real time username availability check
+* real time password check (length, strength, not on list, match)
 
 
 ==Goals==
@@ -19,7 +22,7 @@ It's crude, still needs a lot of work. I'm uploading it so I can play with git.
 * A way to protect against SQL injection.
 * Admin adjustable lockable/recoverable accounts.
 * Error tracking.
-* User table generation.
+
 
 ==Things I find annoying from other login systems==
 * No way to recover/reset password.
