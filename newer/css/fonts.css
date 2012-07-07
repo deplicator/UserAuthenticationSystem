@@ -1,0 +1,30 @@
+/*Used in Logo*/
+@font-face {
+  font-family: 'Questrial';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Questrial'), local('Questrial-Regular'), url('../fonts/Questrial.woff') format('woff');
+}
+
+/*Used in Menu*/
+@font-face {
+  font-family: 'Play';
+  font-style: normal;
+  font-weight: bold;
+  src: local('Play-Bold'), url('../fonts/Play-Bold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Play';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Play'), url('../fonts/Play.woff') format('woff');
+}
+
+/*Used as default page font*/
+@font-face {
+  font-family: 'Andada';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Andada-Regular'), url('../fonts/Andada-Regular.woff') format('woff');
+}

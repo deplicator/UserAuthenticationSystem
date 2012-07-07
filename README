@@ -1,11 +1,24 @@
 Signin System
 ============
-It's crude, still needs a lot of work. I'm uploading it so I can play with git.
+==simple==
+http://www.emirplicanic.com/php/simple-phpmysql-authentication-class
+So far I like the simplicity of this, and would like to make it more functional.
 
-==to do==
-* Combine "check" files into one.
+* A way to add users.
+* encryption not optional
+* bcrypt encryption.
+* user pages
+* admin pages
+
+
+==newer==
+Arguably cruder than old and storing for reference.
+
+==old==
+It's a crude attempt of a signin system I'd like to rework one day. I'm storing this here for reference.
+
+===to do===
 * test sending of email
-* fix session cookie
 * reset account function
 * user account pages
 * creation of admin accounts
@@ -16,7 +29,7 @@ It's crude, still needs a lot of work. I'm uploading it so I can play with git.
 * real time password check (length, strength, not on list, match)
 
 
-==Goals==
+===Goals===
 * Simple (at least from the user's perspective)
 * Passwords not stored in plain text encrypted and salted.
 * A way to protect against SQL injection.
@@ -24,7 +37,7 @@ It's crude, still needs a lot of work. I'm uploading it so I can play with git.
 * Error tracking.
 
 
-==Things I find annoying from other login systems==
+===Things I find annoying from other login systems===
 * No way to recover/reset password.
 * Nothing to tell me if my username or password is wrong.
 * Having to retype my username every time I try a new password.
