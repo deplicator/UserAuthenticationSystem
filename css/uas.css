@@ -49,6 +49,7 @@
 .uasinfo p {
 	color: red;
 	margin: 0;
+	padding: 5px;
 }
 
 .uasinfo #signin-menu-border {

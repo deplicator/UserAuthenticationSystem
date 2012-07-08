@@ -1,4 +1,5 @@
 <?php 
+include '../header.php';
 include 'functions.php';
 $message = '';
 $email = '';
@@ -20,11 +21,11 @@ if(isset($_REQUEST['email']) && isset($_REQUEST['password'])) {
 
 ?>
 
-<div id="signup">
+<div class="uasinfo" id="signup">
 <h2>Sign up</h2>
-	<form method="POST">
+	<form id="form" method="POST">
 		<div id="email">
-			<label for="username">email</label>
+			<label for="username">Email</label>
 			<input type="text" name="email" value="<?php echo $email; ?>" spellcheck="false" />
 		</div>
 		
@@ -39,5 +40,12 @@ if(isset($_REQUEST['email']) && isset($_REQUEST['password'])) {
 		</div>
 		<input id="submit" type="submit" value="Submit"/>
 	</form>
-<p><?php echo $message; ?></p>
+	<p><?php echo $message; ?></p>
+	<div id="signin-menu-border">
+		<div id="signin-menu">
+		<a href="./signin.php">Sign in</a>
+		<a href="./reset.php">Reset</a>
+		<a href="mailto:<?php echo SUPPORT_EMAIL; ?>">Support</a>
+		</div>
+	</div>
 </div>

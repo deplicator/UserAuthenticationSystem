@@ -22,7 +22,7 @@ class authenticate {
 			if($how === 'readonly') {
 				$conn = new PDO($DSN, $this->db_ro_user, $this->db_ro_password);
 				return $conn;
-			} else if ($how === 'write') {
+			} elseif ($how === 'write') {
 				$conn = new PDO($DSN, $this->db_user, $this->db_password);
 				return $conn;
 			} else {
@@ -42,13 +42,13 @@ class authenticate {
 		if($email == '' || $password == '' || $passwordconfirm == '') {
 			header("Location: signup.php?message=blank");
 			exit;
-		} else if($password != $passwordconfirm) {
+		} elseif($password != $passwordconfirm) {
 			header("Location: signup.php?message=mismatch&email=$email");
 			exit;
-		} else if(strpos($email,'@') === false) {
+		} elseif(strpos($email,'@') === false) {
 			header("Location: signup.php?message=invalidemail");
 			exit;
-		} else if($this->checkEmail($email) == true) {
+		} elseif($this->checkEmail($email) == true) {
 			header("Location: signup.php?message=emailinuse");
 			exit;
 		} else {
@@ -70,22 +70,41 @@ class authenticate {
 		}
 	}
 	
-	//Signin
+	/*
+	 * Sign in function, runs checks against username and password and returns 
+	 * message if unsuccessful.
+	 */
 	function signin($email, $password) {
+		//Blank field.
 		if($email == '' || $password == '') {
 			header("Location: signin.php?message=blank");
 			exit;
-		} else if($this->checkEmail($email) == false) {
+		//Email not found in database.
+		} elseif($this->checkEmail($email) == false) {
 			header("Location: signin.php?message=emailnotfound");
 			exit;
-		} else if($this->checkEmail($email) == true) {
+		//Email found, ...
+		} elseif($this->checkEmail($email) == true) {
+			// ...but password incorrect.
 			if($this->checkPassword($email, $password) == false) {
-				header("Location: signin.php?message=password");
+				header("Location: signin.php?message=password&email=$email");
+				$this->updateAttempts($email); //Increment failed attempts by 1.
 				exit;
+			// ...but account is locked.
+			} elseif($this->checkLock($email) == true) {
+				header("Location: signin.php?message=account");
+				exit;
+			// ...and do sign in procedure.
 			} else {
-				$_SESSION['email'] = $email;
+//!!This is not working as expected!!
+//fix it - fucntion work individually, else statement only runs first line.
+//It worked fine until I added the two functions. Similar weirdness on line 90 and 91.
+				$this->updateSigninCount($email); //Add 1 to signinCount.
+				$this->updateAttempts($email, true); //Reset failed attempts.
+				$_SESSION['email'] = $email; //Create session.
 				$_SESSION['signedin'] = true;
 				header("Location: ../index.php");
+				exit();
 			}
 		}
 	}
@@ -96,7 +115,25 @@ class authenticate {
 		return;
 	}
 	
-	//Checks to see if email is already in database
+	//Reset account
+	function reset($email) {
+		if($email == '') {
+			header("Location: reset.php?message=blank");
+			exit;
+		} elseif($this->checkEmail($email) == false) {
+			header("Location: reset.php?message=emailnotfound");
+			exit;
+		} else {
+			$this->sendEmail($email);
+			header("Location: reset.php?message=emailreset");
+		}
+	}
+	
+//The following are generic functions used more than once (in most cases).
+	
+	/*
+	 * Checks to see if email is already in the database.
+	 */
 	private function checkEmail($email) {
 		$conn = $this->databaseConnect();
 		$sql = "SELECT email FROM users WHERE email = '$email'";
@@ -109,7 +146,9 @@ class authenticate {
 		}
 	}
 	
-	//Checks password
+	/*
+	 * Checks account password. Requires email and password.
+	 */
 	private function checkPassword($email, $password) {
 		$conn = $this->databaseConnect();
 		$sql = "SELECT password FROM users WHERE email = '$email' LIMIT 1";
@@ -125,7 +164,70 @@ class authenticate {
 			return false;
 		}
 	}
+
+	/*
+	 * Check if account is locked, account can be locked if it is new and email
+	 * has not been verified, or if there have been too many failed login
+	 * attempts.
+	 */
+	private function checkLock($email) {
+		$conn = $this->databaseConnect();
+		$sql = "SELECT locked FROM users WHERE email = '$email' LIMIT 1";
+		$stmt = $conn->query($sql);
+		$result = $stmt->fetch(PDO::FETCH_ASSOC);
+		if($result['locked'] == '1') {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
+	/* 
+	 * Updates number of login attempts by email. When $reset parameter is set 
+	 * to true it will reset attempts to 0.
+	 */
+	private function updateAttempts($email, $reset = false) {
+		$conn = $this->databaseConnect();
+		$sql = "SELECT attempts FROM users WHERE email = '$email' LIMIT 1";
+		$stmt = $conn->query($sql);
+		$result = $stmt->fetch(PDO::FETCH_ASSOC);
+		$i = $result['attempts'];
+		$i++;
+
+		$conn = $this->databaseConnect('write');
+		if($reset === false) {
+			$sql = "UPDATE users SET attempts = '$i' WHERE email = '$email' LIMIT 1";
+		} else {
+			$sql = "UPDATE users SET attempts = '0' WHERE email = '$email' LIMIT 1";
+		}
+		$stmt = $conn->exec($sql);
+		$stmt->closeCursor();
+	}
+	
+	/*
+	 * Tracks total number of times a user has logged in.
+	 */
+	private function updateSigninCount($email) {
+		$conn = $this->databaseConnect();
+		$sql = "SELECT signinCount FROM users WHERE email = '$email' LIMIT 1";
+		$stmt = $conn->query($sql);
+		$result = $stmt->fetch(PDO::FETCH_ASSOC);
+		$i = $result['signinCount'];
+		$i++;
+		
+		$conn = $this->databaseConnect('write');
+		$sql = "UPDATE users set signinCount = '$i' WHERE email = '$email' LIMIT 1";
+		$stmt = $conn->exec($sql);
+		$stmt->closeCursor();
+	}
+	
+	/*
+	 * Sends an email with email hash for initial account verification or 
+	 * account resets.
+	 */
+	private function sendEmail($email) {
+		//insert magic here
+	}
 
 	
 }

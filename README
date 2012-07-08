@@ -1,6 +1,5 @@
 User Authentication System
 ==========================
-
 ==Goals==
 ===Simple===
 Being new to development, my code and thought process is simple. Part of the 
@@ -20,6 +19,7 @@ This project is intended to be the foundation for other projects.
 
 
 ==Tasks==
+* !Troubleshoot weirdness in authenticate::signin() function.
 * Email Verification
 * Email Reset
 * Real time email availability and password checks.
@@ -30,6 +30,27 @@ for future expansion would be nice.
 options. Also where Administrators can promote users to admin.
 * User Profiles - A place where users can update their own information.
 * Install file that sets up MySQL tables.
+
+
+==MySQL Tables==
+(for reference)
+===users===
+Records created for each user added, this table is used only for signing in, 
+singing up, and resets. Site specific user data is stored in a related table.
+* ID - primary key, auto incremented
+* email - I opted to use email over a username, if anything just to have one less field. Also unique.
+* emailhash - hash sent to verify email or resets
+* password - hashed password field
+* creationDate - Date account was created
+* locked - Boolean, all accounts start locked (1). Accounts can be locked after too many unsuccessful attempts. Locks can be removed with a reset.
+* attempts - Every unsuccessful attempt increases this counter, account locks when it gets to an admin set number. Successful login resets to 0.
+* SigninCount - Number of times the user has successfully logged in.
+* lastSignin - Date and time of the last successful user login.
+
+===userdetails===
+Site specific table, can change based on what the site is all about. ID is the 
+only field required.
+* ID - Relation to users.
 
 
 ==Old Folder==

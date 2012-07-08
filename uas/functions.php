@@ -33,6 +33,10 @@ function getMessage($message) {
 			$message = 'User created, you can now sign in.';
 			break;
 	
+		case 'emailreset':
+			$message = 'A reset email has been sent.';
+			break;
+				
 		default:
 			$message = 'An unknown error has occured.';
 			break;
