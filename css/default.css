@@ -1,0 +1,8 @@
+@import url(reset.css);
+@import url(uas.css);
+
+
+footer {
+	font-size: .5em;
+	text-align: right;
+}

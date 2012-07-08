@@ -1,16 +1,16 @@
-Signin System
-============
+User Authentication System
+==========================
 
 ==Goals==
 ===Simple===
-Being new to development, my code is simple. Part of the reason I'm doing this 
-is to learn. Because this system meets my level of understanding it has to be 
-simple.
+Being new to development, my code and thought process is simple. Part of the 
+reason I'm doing this is to learn. Because this system meets my level of 
+understanding, by default it is simple.
 
 ===Secure===
-Simple doesn't mean it can't be secure. Passwords are salted and hashed with 
-a bcrypt class (credit and thanks to stackoverflow user Andrew Moore). Database 
-inputs have been sanitized to the best of my understanding.
+Simple doesn't insecure. Passwords are salted and hashed with a bcrypt class 
+(credit and thanks to stackoverflow user Andrew Moore). Database inputs have 
+been sanitized to the best of my understanding.
 
 This is a far from flawless. There are still plenty of security measures that 
 can be put in place.
@@ -20,16 +20,16 @@ This project is intended to be the foundation for other projects.
 
 
 ==Tasks==
+* Email Verification
+* Email Reset
+* Real time email availability and password checks.
 * Second table for expanded user info (name, preference, rights level, etc.).
 * User Rights - Probably just two levels, user and admin. An open ended system 
 for future expansion would be nice.
 * Administrator Options - A place where administrators can change site wide 
 options. Also where Administrators can promote users to admin.
 * User Profiles - A place where users can update their own information.
-* Email Verification
-* Email Reset
 * Install file that sets up MySQL tables.
-* Real time email availability and password checks.
 
 
 ==Old Folder==
@@ -44,4 +44,4 @@ Previous crude attempts I keep around for reference.
 * http://xato.net/
 * https://xato.net/passwords/more-top-worst-passwords/
 * http://en.wikibooks.org/wiki/PHP_Programming/User_login_systems
-http://www.whatsmypass.com/the-top-500-worst-passwords-of-all-time
+* http://www.whatsmypass.com/the-top-500-worst-passwords-of-all-time

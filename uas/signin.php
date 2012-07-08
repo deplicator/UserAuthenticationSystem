@@ -1,4 +1,5 @@
 <?php 
+include '../header.php';
 include 'functions.php';
 $message = '';
 $email = '';
@@ -20,7 +21,7 @@ if(isset($_REQUEST['email']) && isset($_REQUEST['password'])) {
 
 ?>
 
-<div id="signin">
+<div class="uasinfo" id="signin">
 <h2>Sign in</h2>
 	<form method="POST">
 		<div id="email">
