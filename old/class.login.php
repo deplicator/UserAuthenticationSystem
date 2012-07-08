@@ -52,7 +52,7 @@ class logmein {
     }
 
     //signup function
-	function signup($table, $username, $password, $passwordconfirm) {
+	function signup($username, $password, $passwordconfirm) {
 		$this->databaseconnect('write');
 		
 	}
