@@ -1,6 +1,6 @@
 Signin System
 ============
-==simple==
+==newer==
 http://www.emirplicanic.com/php/simple-phpmysql-authentication-class
 So far I like the simplicity of this, and would like to make it more functional.
 
@@ -11,8 +11,6 @@ So far I like the simplicity of this, and would like to make it more functional.
 * admin pages
 
 
-==newer==
-Arguably cruder than old and storing for reference.
 
 ==old==
 It's a crude attempt of a signin system I'd like to rework one day. I'm storing this here for reference.

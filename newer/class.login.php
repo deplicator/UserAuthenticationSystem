@@ -28,12 +28,36 @@ class logmein {
         mysql_select_db($this->database_logon) or die ('Unable to select database!');
         return;
     }
-    
-    //signup function
-    function signup($table, $username, $password) {
-    	$this->dbconnect();
+
+    //new database connection
+	function databaseConnect($how = 'readonly') {
+    	$DSN = 'mysql:host=' . $this->hostname_logon . ';dbname=' . $this->database_logon;
+    	try {
+    		if($how === 'readonly') {
+    			$conn = new PDO($DSN, $this->username_logon, $this->password_logon);
+    			return $conn;
+    		} else if ($how === 'write') {
+    			$conn = new PDO($DSN, $this->username_logon, $this->password_logon);
+    			return $conn;
+    		} else {
+    			$file = './errors.txt';
+    			$error = date('Y-m-d H:i:s') . ' - Function: ' . __FUNCTION__ . ' - Invalid Parameter.' . PHP_EOL;
+    			file_put_contents($file, $error, FILE_APPEND | LOCK_EX);
+    		}
+    	} catch (PDOException $e) {
+    		$file = './errors.txt';
+    		$error = date('Y-m-d H:i:s') . ' - Function: ' . __FUNCTION__ . ' - ' . $e->getMessage() . PHP_EOL;
+    		file_put_contents($file, $error, FILE_APPEND | LOCK_EX);
+    	}
     }
- 
+
+    //signup function
+	function signup($table, $username, $password, $passwordconfirm) {
+		$this->databaseconnect('write');
+		
+	}
+
+	
     //login function
     function login($table, $username, $password){
         //conect to DB

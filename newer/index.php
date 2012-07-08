@@ -1,21 +1,22 @@
-<?php
-include 'header.php';
-
-
-
-session_start();
-
-if(!$_SESSION) { // If the user IS NOT logged in, forward them back to the login page
-		echo 'No user signed in.<br>'; ?>
-
-<a href="./uas/signin.php">Sign in</a><br>
-<a href="./uas/signup.php">Sign up</a><br>
-<a href="./uas/reset.php">Reset</a>		
-
 <?php 
-} else { //If the user IS logged in, then echo the page contents:
-	$currentUser = $_SESSION['username']; //Gets username from cookie created in login-check.php.
-	echo $currentUser . " is signed in.<br>"; ?>
-	<a href="">Sign out</a>	
+include("class.login.php");
 
-<?php } include 'footer.php';?>
+$log = new logmein();
+/*
+$log->encrypt = true; //set encryption
+//parameters are(SESSION, name of the table, name of the password field, name of the username field)
+if($log->logincheck($_SESSION['loggedin'], "logon", "password", "useremail") == false){
+    header("Location: login.php");
+}else{
+    echo 'you\'re loged in.';
+}
+
+
+$bcrypt = new Bcrypt(5);
+
+$hash = $bcrypt->hash('dd');
+$isGood = $bcrypt->verify('dd', $hash);
+var_dump($isGood);
+*/
+
+var_dump($log->databaseConnect('write'));
