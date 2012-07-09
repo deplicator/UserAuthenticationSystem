@@ -14,7 +14,7 @@ if(isset($_GET['fail'])) {
 	<h2>Reset Account</h2>
 	<p><?php echo $failType; ?></p>
 	
-	<form action="./include/check.php" method="POST">
+	<form method="POST">
 		<div id="username">
 			<label for="username">Username</label>
 			<input type="text" name="username" size="20" spellcheck="false" />

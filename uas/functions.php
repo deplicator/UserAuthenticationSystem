@@ -29,12 +29,16 @@ function getMessage($message) {
 			$message = 'Invalid email address.';
 			break;
 				
-		case 'success':
-			$message = 'User created, you can now sign in.';
+		case 'checkemail':
+			$message = 'New accounts are locked until email has been verified.';
 			break;
 	
 		case 'emailreset':
 			$message = 'A reset email has been sent.';
+			break;
+
+		case 'verified':
+			$message = 'Account email verified, you can now sign in.';
 			break;
 				
 		default:

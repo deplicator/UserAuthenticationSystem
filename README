@@ -1,5 +1,18 @@
 User Authentication System
 ==========================
+==Tasks==
+* double check email and reset functions
+* Real time email availability and password checks.
+* Table for expanded user info (name, preference, rights level, etc..).
+* Table for admin settings.
+* User Rights - Probably just two levels, user and admin. An open ended system 
+for future expansion would be nice.
+* Administrator Options - A place where administrators can change site wide 
+options. Also where Administrators can promote users to admin.
+* User Profiles - A place where users can update their own information.
+* Install file that sets up MySQL tables.
+
+
 ==Goals==
 ===Simple===
 Being new to development, my code and thought process is simple. Part of the 
@@ -18,20 +31,6 @@ can be put in place.
 This project is intended to be the foundation for other projects.
 
 
-==Tasks==
-* !Troubleshoot weirdness in authenticate::signin() function.
-* Email Verification
-* Email Reset
-* Real time email availability and password checks.
-* Second table for expanded user info (name, preference, rights level, etc.).
-* User Rights - Probably just two levels, user and admin. An open ended system 
-for future expansion would be nice.
-* Administrator Options - A place where administrators can change site wide 
-options. Also where Administrators can promote users to admin.
-* User Profiles - A place where users can update their own information.
-* Install file that sets up MySQL tables.
-
-
 ==MySQL Tables==
 (for reference)
 ===users===
@@ -47,10 +46,15 @@ singing up, and resets. Site specific user data is stored in a related table.
 * SigninCount - Number of times the user has successfully logged in.
 * lastSignin - Date and time of the last successful user login.
 
-===userdetails===
+===adminsettings===
+* Support email
+* Attempts before account lock
+
+===Site Specific userdetails===
 Site specific table, can change based on what the site is all about. ID is the 
-only field required.
+only field required. User level's would probably go in this table too.
 * ID - Relation to users.
+* UserLevel - can be standard and admin, or a number.
 
 
 ==Old Folder==
