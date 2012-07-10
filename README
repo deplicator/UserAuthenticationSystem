@@ -1,2 +1,11 @@
 User Authentication System - experiment branch
 ==========================
+<tasks>
+[ ] add experiment
+[ ] maybe: replace bcrypt class with something easier to use on dreamhost
+
+[x] remove account locking
+[x] remove all email functionality
+[x] remove account rest for now
+</tasks>
+

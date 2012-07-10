@@ -61,21 +61,18 @@ class authenticate {
 			exit;
 		} else {
 			$CreationDate = date('Y-m-d H:i:s');
+			$locked = 0;
 			
 			$passwordbcrypt = new Bcrypt(10);
 			$hash = $passwordbcrypt->hash($password);
-			
-			$emailhashbcrypt = new Bcrypt(15);
-			$emailhash = $emailhashbcrypt->hash(rand(0,10000));
-			
+						
 			$conn = $this->databaseConnect('write');
-			$sql = "INSERT INTO users (email, password, CreationDate, emailhash)
+			$sql = "INSERT INTO users (email, password, CreationDate, locked)
 			VALUES (?, ?, ?, ?)";
 			$stmt = $conn->prepare($sql);
-			$stmt->execute(array($email, $hash, $CreationDate, $emailhash));
+			$stmt->execute(array($email, $hash, $CreationDate, $locked));
 			$conn = null;
-			$this->sendEmail($email);
-			header("Location: signin.php?message=checkemail");
+			header("Location: signin.php?");
 		}
 	}
 	
@@ -125,23 +122,6 @@ class authenticate {
 		return;
 	}
 	
-	
-	/*
-	 * Sends reset email to email in database with reset instructions.
-	 */
-	function reset($email) {
-		if($email == '') {
-			header("Location: reset.php?message=blank");
-			exit;
-		} elseif($this->checkEmail($email) == false) {
-			header("Location: reset.php?message=emailnotfound");
-			exit;
-		} else {
-			$this->sendEmail($email, 'reset');
-			header("Location: reset.php?message=emailreset");
-		}
-	}
-
 	
 	/*
 	 * Checks to see if email is already in the database.
@@ -250,74 +230,4 @@ class authenticate {
 		$stmt = $conn->exec($sql);
 		$conn = null;
 	}
-	
-	
-	/*
-	 * Creates new email hash from random number when called. Sends an email 
-	 * with random number generated for initial account verification or account 
-	 * resets. Optional parameter $reset = 'reset' for account reset.
-	 */
-	function sendEmail($email, $reset = 'no') {
-		$random = rand(0,100000000000);
-		$emailhashbcrypt = new Bcrypt(15);
-		$emailhash = $emailhashbcrypt->hash($random);
-		
-		$conn = $this->databaseConnect('write');
-		$sql = "UPDATE users SET emailhash = ? WHERE email = ?";
-		$stmt = $conn->prepare($sql);
-		$stmt->execute(array($emailhash, $email));
-		$conn = null;
-		
-		//email
-		if($reset = 'no') {
-			$subject = 'New User Created - Please Verify Email';
-			$link = 'http://localhost/verify.php?email=' . $email . '&code=' . $random;
-			$message = '		
-			Thanks for signing up ' . $email . '! Please click the following link to 
-			activate account.<br>
-			<a href="' . $link . '">' . $link . '</a>
-			';
-			$from = 'SUPPORT_EMAIL';
-			$headers = "From:" . $from;
-			mail($email,$subject,$message,$headers);
-		} elseif($reset = 'reset') {
-			$subject = 'Account Reset - Please Verify Email';
-			$link = 'http://localhost/verify.php?email=' . $email . '&code=' . $random . '&reset=reset';
-			$message = '
-			Please click the following link to reset account.<br>
-			<a href="' . $link . '">' . $link . '</a>
-			';
-			$from = 'SUPPORT_EMAIL';
-			$headers = "From:" . $from;
-			mail($email,$subject,$message,$headers);
-		}
-	}
-	
-	
-	/*
-	 * Checks for email in database, verifies code against emailhash.
-	 */
-	function verifyEmail($email, $code) {
-		if($this->checkEmail($email) === true) {
-			$conn = $this->databaseConnect();
-			$sql = "SELECT emailhash FROM users WHERE email = '$email'";
-			$stmt = $conn->query($sql);
-			$result = $stmt->fetch(PDO::FETCH_ASSOC);
-			
-			$bcrypt = new Bcrypt(10);
-			$check = $bcrypt->verify($code, $result['emailhash']);
-			
-			if($check === true) {
-				$this->checkLock($email, true);
-				header("Location: signin.php?message=verified");
-				exit();
-			} elseif($check === false) {
-				header("Location: signup.php");
-			}
-		} else {
-			header("Location: signup.php");
-		}
-	}
-	
-	
 }
