@@ -1,17 +1,16 @@
 User Authentication System
 ==========================
-==Tasks==
-* double check email and reset functions
-* Real time email availability and password checks.
-* Table for expanded user info (name, preference, rights level, etc..).
-* Table for admin settings.
-* User Rights - Probably just two levels, user and admin. An open ended system 
-for future expansion would be nice.
-* Administrator Options - A place where administrators can change site wide 
-options. Also where Administrators can promote users to admin.
-* User Profiles - A place where users can update their own information.
-* Install file that sets up MySQL tables.
-
+<tasks>
+[2] maybe: by default dreamhost doesn't support Blowfish, a hash option that doesn't require would be nice.
+[ ] double check email and reset functions
+[ ] Real time email availability and password checks.
+[ ] Table for expanded user info (name, preference, rights level, etc..).
+[ ] Table for admin settings.
+[ ] User Rights - Probably just two levels, user and admin. An open ended system for future expansion would be nice.
+[ ] Administrator Options - A place where administrators can change site wide options. Also where Administrators can promote users to admin.
+[ ] User Profiles - A place where users can update their own information.
+[ ] Install file that sets up MySQL tables and an admin account.
+<tasks>
 
 
 ==Goals==
