@@ -46,11 +46,11 @@ class authenticate {
 	/*
 	 * Creat a new user in the database and send verification email.
 	 */
-	function newUser($email, $password, $passwordconfirm) {
-		if($email == '' || $password == '' || $passwordconfirm == '') {
+	function newUser($email, $password, $passwordconfirm, $spnCode, $spnCodeConfirm) {
+		if($email == '' || $password == '' || $passwordconfirm == '' || $spnCode == '' || $spnCodeConfirm == '') {
 			header("Location: signup.php?message=blank");
 			exit;
-		} elseif($password != $passwordconfirm) {
+		} elseif($password != $passwordconfirm || $spnCode != $spnCodeConfirm) {
 			header("Location: signup.php?message=mismatch&email=$email");
 			exit;
 		} elseif(strpos($email,'@') === false) {
@@ -65,12 +65,15 @@ class authenticate {
 			
 			$passwordbcrypt = new Bcrypt(10);
 			$hash = $passwordbcrypt->hash($password);
+			
+			$spnCodecrypt = new Bcrypt(10);
+			$spnCodehash = $spnCodecrypt->hash($spnCode);
 						
 			$conn = $this->databaseConnect('write');
-			$sql = "INSERT INTO users (email, password, CreationDate, locked)
-			VALUES (?, ?, ?, ?)";
+			$sql = "INSERT INTO usersExperiment (email, password, CreationDate, locked, spnCode)
+			VALUES (?, ?, ?, ?, ?)";
 			$stmt = $conn->prepare($sql);
-			$stmt->execute(array($email, $hash, $CreationDate, $locked));
+			$stmt->execute(array($email, $hash, $CreationDate, $locked, $spnCodehash));
 			$conn = null;
 			header("Location: signin.php?");
 		}
@@ -81,7 +84,7 @@ class authenticate {
 	 * Sign in function, runs checks against username and password and returns 
 	 * message if unsuccessful.
 	 */
-	function signin($email, $password) {
+	function signin($email, $password, $spnCode) {
 		//Blank field.
 		if($email == '' || $password == '') {
 			header("Location: signin.php?message=blank&email=$email");
@@ -97,7 +100,7 @@ class authenticate {
 				header("Location: signin.php?message=account");
 				exit;
 			// ...but password incorrect.
-			} elseif($this->checkPassword($email, $password) == false) {
+			} elseif($this->checkPassword($email, $password, $spnCode) == false) {
 				$this->updateAttempts($email); //Increment failed attempts by 1.
 				header("Location: signin.php?message=password&email=$email");
 				exit;
@@ -128,7 +131,7 @@ class authenticate {
 	 */
 	function checkEmail($email) {
 		$conn = $this->databaseConnect();
-		$sql = "SELECT email FROM users WHERE email = '$email'";
+		$sql = "SELECT email FROM usersExperiment WHERE email = '$email'";
 		$stmt = $conn->query($sql);
 		$result = $stmt->fetch(PDO::FETCH_ASSOC);
 		if($result['email'] === $email) {
@@ -142,16 +145,19 @@ class authenticate {
 	/*
 	 * Checks account password. Requires email and password.
 	 */
-	function checkPassword($email, $password) {
+	function checkPassword($email, $password, $spnCode) {
 		$conn = $this->databaseConnect();
-		$sql = "SELECT password FROM users WHERE email = '$email' LIMIT 1";
+		$sql = "SELECT password, spnCode FROM usersExperiment WHERE email = '$email' LIMIT 1";
 		$stmt = $conn->query($sql);
 		$result = $stmt->fetch(PDO::FETCH_ASSOC);
 		
 		$bcrypt = new Bcrypt(10);
 		$check = $bcrypt->verify($password, $result['password']);
 		
-		if($check === true) {
+		$spnCodebcrypt = new Bcrypt(10);
+		$spnCodeCheck = $spnCodebcrypt->verify($spnCode, $result['spnCode']);
+		
+		if($check === true && $spnCodeCheck === true) {
 			return true;
 		} else {
 			return false;
@@ -167,7 +173,7 @@ class authenticate {
 	function checkLock($email, $reset = false) {
 		if($reset === false) {
 			$conn = $this->databaseConnect();
-			$sql = "SELECT locked FROM users WHERE email = '$email' LIMIT 1";
+			$sql = "SELECT locked FROM usersExperiment WHERE email = '$email' LIMIT 1";
 			$stmt = $conn->query($sql);
 			$result = $stmt->fetch(PDO::FETCH_ASSOC);
 			if($result['locked'] == '1') {
@@ -177,7 +183,7 @@ class authenticate {
 			}
 		} elseif ($reset === true) {
 			$conn = $this->databaseConnect('write');
-			$sql = "UPDATE users SET locked = '0' WHERE email = '$email' LIMIT 1";
+			$sql = "UPDATE usersExperiment SET locked = '0' WHERE email = '$email' LIMIT 1";
 			$stmt = $conn->exec($sql);
 			$conn = null;
 		}
@@ -191,7 +197,7 @@ class authenticate {
 	 */
 	function updateAttempts($email, $reset = false) {
 		$conn = $this->databaseConnect();
-		$sql = "SELECT attempts FROM users WHERE email = '$email' LIMIT 1";
+		$sql = "SELECT attempts FROM usersExperiment WHERE email = '$email' LIMIT 1";
 		$stmt = $conn->query($sql);
 		$result = $stmt->fetch(PDO::FETCH_ASSOC);
 		$i = $result['attempts'];
@@ -199,14 +205,14 @@ class authenticate {
 
 		$conn = $this->databaseConnect('write');
 		if($reset === false) {
-			$sql = "UPDATE users SET attempts = '$i' WHERE email = '$email' LIMIT 1";
+			$sql = "UPDATE usersExperiment SET attempts = '$i' WHERE email = '$email' LIMIT 1";
 		} else {
-			$sql = "UPDATE users SET attempts = '0' WHERE email = '$email' LIMIT 1";
+			$sql = "UPDATE usersExperiment SET attempts = '0' WHERE email = '$email' LIMIT 1";
 		}
 		$stmt = $conn->exec($sql);
 		
 		if($i >= 10) {
-			$sql = "UPDATE users SET locked = '1' WHERE email = '$email' LIMIT 1";
+			$sql = "UPDATE usersExperiment SET locked = '1' WHERE email = '$email' LIMIT 1";
 			$stmt = $conn->exec($sql);
 		}
 		
@@ -219,14 +225,14 @@ class authenticate {
 	 */
 	function updateSigninCount($email) {
 		$conn = $this->databaseConnect();
-		$sql = "SELECT signinCount FROM users WHERE email = '$email' LIMIT 1";
+		$sql = "SELECT signinCount FROM usersExperiment WHERE email = '$email' LIMIT 1";
 		$stmt = $conn->query($sql);
 		$result = $stmt->fetch(PDO::FETCH_ASSOC);
 		$i = $result['signinCount'];
 		$i++;
 		
 		$conn = $this->databaseConnect('write');
-		$sql = "UPDATE users set signinCount = '$i' WHERE email = '$email' LIMIT 1";
+		$sql = "UPDATE usersExperiment set signinCount = '$i' WHERE email = '$email' LIMIT 1";
 		$stmt = $conn->exec($sql);
 		$conn = null;
 	}

@@ -1,11 +1,21 @@
 User Authentication System - experiment branch
 ==========================
 <tasks>
-[ ] add experiment
-[ ] maybe: replace bcrypt class with something easier to use on dreamhost
+[ ] Needs cross browser support (apparently keyCode's differ in each browser).
+[ ] maybe: replace bcrypt class with something easier to use with dreamhost.
+[ ] Disable F-keys while typing in password fields.
 
-[x] remove account locking
-[x] remove all email functionality
-[x] remove account rest for now
+[x] Remove account locking.
+[x] Remove all email functionality.
+[x] Remove account rest for now.
+[x] Add hidden keyCode field.
 </tasks>
 
+==Experiment==
+The goal is to create a key stroke level password that can be used to sign into 
+accounts.
+
+Most keys seem to work, still need to disable F-keys, and some others at least 
+while in password field. Even distinguishes between number keys and key pad.
+
+Has only been tested in Chrome. Still need refinement.

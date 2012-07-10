@@ -65,3 +65,9 @@
 	margin: 10px auto;
 	width: 148px;
 }
+
+#info {
+	width: 60%;
+	margin: 0 auto;
+	padding: 5px;
+}
