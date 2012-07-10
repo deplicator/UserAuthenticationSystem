@@ -13,6 +13,7 @@ options. Also where Administrators can promote users to admin.
 * Install file that sets up MySQL tables.
 
 
+
 ==Goals==
 ===Simple===
 Being new to development, my code and thought process is simple. Part of the 

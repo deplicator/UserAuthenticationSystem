@@ -8,12 +8,12 @@ include 'class.bcrypt.php';
 session_start();
 class authenticate {
 	
-	var $db_hostname = 'localhost';					//Database server LOCATION
-	var $db_name = 'UserAuthenticationSystem';		//Database NAME
-	var $db_ro_user = 'uasuser';					//Database read only user
-	var $db_ro_password = 'u5YzpCaZQfF';			//Database read only password
-	var $db_user = 'uasuser';						//Database read/write user
-	var $db_password = 'u5YzpCaZQfF';				//Database read/write password
+	var $db_hostname = DBHOST;		//Database server LOCATION
+	var $db_name = DBNAME;			//Database NAME
+	var $db_ro_user = DBROUSER;		//Database read only user
+	var $db_ro_password = DBROPASS;	//Database read only password
+	var $db_user = DBWUSER;			//Database read/write user
+	var $db_password = DBWPASS;		//Database read/write password
 
 	
 	/*
