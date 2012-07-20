@@ -65,3 +65,11 @@
 	margin: 10px auto;
 	width: 148px;
 }
+
+.test {
+    margin: -4px 0 0 3px;
+}
+
+.test a:hover {
+    text-shadow: none;
+}
