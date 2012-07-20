@@ -1,6 +1,6 @@
 <?php 
-include '../header.php';
-include 'functions.php';
+include_once '../header.php';
+
 $message = '';
 $email = '';
 
@@ -13,8 +13,6 @@ if(isset($_REQUEST['email'])) {
 }
 
 if(isset($_REQUEST['email']) && isset($_REQUEST['password'])) {
-	include("class.authenticate.php");
-
 	$user = new authenticate();
 	$user->signin($_REQUEST['email'], $_REQUEST['password']);
 }

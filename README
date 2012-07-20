@@ -1,7 +1,6 @@
 User Authentication System
 ==========================
 <tasks>
-[2] maybe: by default dreamhost doesn't support Blowfish, a hash option that doesn't require would be nice.
 [ ] double check email and reset functions
 [ ] Real time email availability and password checks.
 [ ] Table for expanded user info (name, preference, rights level, etc..).
@@ -10,6 +9,7 @@ User Authentication System
 [ ] Administrator Options - A place where administrators can change site wide options. Also where Administrators can promote users to admin.
 [ ] User Profiles - A place where users can update their own information.
 [ ] Install file that sets up MySQL tables and an admin account.
+[2] maybe: by default dreamhost doesn't support Blowfish, a hash option that doesn't require would be nice.
 <tasks>
 
 

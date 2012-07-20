@@ -1,47 +1,13 @@
 <?php
-include 'class.bcrypt.php';
-
 //For security reasons, don't display any errors or warnings.
 //error_reporting(0);
 
 //start session
-session_start();
-class authenticate {
-	
-	var $db_hostname = DBHOST;		//Database server LOCATION
-	var $db_name = DBNAME;			//Database NAME
-	var $db_ro_user = DBROUSER;		//Database read only user
-	var $db_ro_password = DBROPASS;	//Database read only password
-	var $db_user = DBWUSER;			//Database read/write user
-	var $db_password = DBWPASS;		//Database read/write password
+if(!isset($_SESSION)) {
+    session_start(); 
+}  
 
-	
-	/*
-	 * Makes connection to database, optional parameter of 'write' to make 
-	 * writeable connection to database assuming database permissions are set 
-	 * correctly on database users.
-	 */
-	function databaseConnect($how = 'readonly') {
-		$DSN = 'mysql:host=' . $this->db_hostname . ';dbname=' . $this->db_name;
-		try {
-			if($how === 'readonly') {
-				$conn = new PDO($DSN, $this->db_ro_user, $this->db_ro_password);
-				return $conn;
-			} elseif ($how === 'write') {
-				$conn = new PDO($DSN, $this->db_user, $this->db_password);
-				return $conn;
-			} else {
-				$file = './errors.txt';
-				$error = date('Y-m-d H:i:s') . ' - Function: ' . __FUNCTION__ . ' - Invalid Parameter.' . PHP_EOL;
-				file_put_contents($file, $error, FILE_APPEND | LOCK_EX);
-			}
-		} catch (PDOException $e) {
-			$file = './errors.txt';
-			$error = date('Y-m-d H:i:s') . ' - Function: ' . __FUNCTION__ . ' - ' . $e->getMessage() . PHP_EOL;
-			file_put_contents($file, $error, FILE_APPEND | LOCK_EX);
-		}
-	}
-	
+class authenticate {
 	
 	/*
 	 * Creat a new user in the database and send verification email.
@@ -68,7 +34,7 @@ class authenticate {
 			$emailhashbcrypt = new Bcrypt(15);
 			$emailhash = $emailhashbcrypt->hash(rand(0,10000));
 			
-			$conn = $this->databaseConnect('write');
+			$conn = databaseConnect('write');
 			$sql = "INSERT INTO users (email, password, CreationDate, emailhash)
 			VALUES (?, ?, ?, ?)";
 			$stmt = $conn->prepare($sql);
@@ -78,7 +44,6 @@ class authenticate {
 			header("Location: signin.php?message=checkemail");
 		}
 	}
-	
 	
 	/*
 	 * Sign in function, runs checks against username and password and returns 
@@ -116,6 +81,16 @@ class authenticate {
 		}
 	}
 	
+	/*
+	 * Retrieves user info so it can be used.
+	 */
+	function userInfo($email) {
+		$conn = databaseConnect();
+		$sql = "SELECT * FROM users WHERE email = '$email' LIMIT 1";
+		$stmt = $conn->query($sql);
+		$result = $stmt->fetch(PDO::FETCH_ASSOC);
+		return $result;
+	}
 	
 	/*
 	 * Logs a user out.
@@ -124,7 +99,6 @@ class authenticate {
 		session_destroy();
 		return;
 	}
-	
 	
 	/*
 	 * Sends reset email to email in database with reset instructions.
@@ -142,12 +116,11 @@ class authenticate {
 		}
 	}
 
-	
 	/*
 	 * Checks to see if email is already in the database.
 	 */
 	function checkEmail($email) {
-		$conn = $this->databaseConnect();
+		$conn = databaseConnect();
 		$sql = "SELECT email FROM users WHERE email = '$email'";
 		$stmt = $conn->query($sql);
 		$result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -158,12 +131,11 @@ class authenticate {
 		}
 	}
 	
-	
 	/*
 	 * Checks account password. Requires email and password.
 	 */
 	function checkPassword($email, $password) {
-		$conn = $this->databaseConnect();
+		$conn = databaseConnect();
 		$sql = "SELECT password FROM users WHERE email = '$email' LIMIT 1";
 		$stmt = $conn->query($sql);
 		$result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -178,7 +150,6 @@ class authenticate {
 		}
 	}
 
-	
 	/*
 	 * Check if account is locked, account is locked if it is new and email has 
 	 * not been verified, or if there have been too many failed login attempts.
@@ -186,7 +157,7 @@ class authenticate {
 	 */
 	function checkLock($email, $reset = false) {
 		if($reset === false) {
-			$conn = $this->databaseConnect();
+			$conn = databaseConnect();
 			$sql = "SELECT locked FROM users WHERE email = '$email' LIMIT 1";
 			$stmt = $conn->query($sql);
 			$result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -196,13 +167,12 @@ class authenticate {
 				return false;
 			}
 		} elseif ($reset === true) {
-			$conn = $this->databaseConnect('write');
+			$conn = databaseConnect('write');
 			$sql = "UPDATE users SET locked = '0' WHERE email = '$email' LIMIT 1";
 			$stmt = $conn->exec($sql);
 			$conn = null;
 		}
 	}
-	
 	
 	/* 
 	 * Updates number of login attempts by email. When $reset parameter is set 
@@ -210,14 +180,14 @@ class authenticate {
 	 * number of attempts reachs the admin specified number (default 10).
 	 */
 	function updateAttempts($email, $reset = false) {
-		$conn = $this->databaseConnect();
+		$conn = databaseConnect();
 		$sql = "SELECT attempts FROM users WHERE email = '$email' LIMIT 1";
 		$stmt = $conn->query($sql);
 		$result = $stmt->fetch(PDO::FETCH_ASSOC);
 		$i = $result['attempts'];
 		$i++;
 
-		$conn = $this->databaseConnect('write');
+		$conn = databaseConnect('write');
 		if($reset === false) {
 			$sql = "UPDATE users SET attempts = '$i' WHERE email = '$email' LIMIT 1";
 		} else {
@@ -233,24 +203,22 @@ class authenticate {
 		$conn = null;
 	}
 	
-	
 	/*
 	 * Tracks total number of times a user has logged in.
 	 */
 	function updateSigninCount($email) {
-		$conn = $this->databaseConnect();
+		$conn = databaseConnect();
 		$sql = "SELECT signinCount FROM users WHERE email = '$email' LIMIT 1";
 		$stmt = $conn->query($sql);
 		$result = $stmt->fetch(PDO::FETCH_ASSOC);
 		$i = $result['signinCount'];
 		$i++;
 		
-		$conn = $this->databaseConnect('write');
+		$conn = databaseConnect('write');
 		$sql = "UPDATE users set signinCount = '$i' WHERE email = '$email' LIMIT 1";
 		$stmt = $conn->exec($sql);
 		$conn = null;
 	}
-	
 	
 	/*
 	 * Creates new email hash from random number when called. Sends an email 
@@ -262,7 +230,7 @@ class authenticate {
 		$emailhashbcrypt = new Bcrypt(15);
 		$emailhash = $emailhashbcrypt->hash($random);
 		
-		$conn = $this->databaseConnect('write');
+		$conn = databaseConnect('write');
 		$sql = "UPDATE users SET emailhash = ? WHERE email = ?";
 		$stmt = $conn->prepare($sql);
 		$stmt->execute(array($emailhash, $email));
@@ -293,13 +261,12 @@ class authenticate {
 		}
 	}
 	
-	
 	/*
 	 * Checks for email in database, verifies code against emailhash.
 	 */
 	function verifyEmail($email, $code) {
 		if($this->checkEmail($email) === true) {
-			$conn = $this->databaseConnect();
+			$conn = databaseConnect();
 			$sql = "SELECT emailhash FROM users WHERE email = '$email'";
 			$stmt = $conn->query($sql);
 			$result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -318,6 +285,5 @@ class authenticate {
 			header("Location: signup.php");
 		}
 	}
-	
-	
+
 }

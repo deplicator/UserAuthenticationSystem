@@ -1,4 +1,34 @@
 <?php
+
+/*
+ * Makes connection to database, optional parameter of 'write' to make
+* writeable connection to database assuming database permissions are set
+* correctly on database users.
+*/
+function databaseConnect($how = 'readonly') {
+	$DSN = 'mysql:host=' . DBHOST . ';dbname=' . DBNAME;
+	try {
+		if($how === 'readonly') {
+			$conn = new PDO($DSN, DBROUSER, DBROPASS);
+			return $conn;
+		} elseif ($how === 'write') {
+			$conn = new PDO($DSN, DBWUSER, DBWPASS);
+			return $conn;
+		} else {
+			$file = './errors.txt';
+			$error = date('Y-m-d H:i:s') . ' - Function: ' . __FUNCTION__ . ' - Invalid Parameter.' . PHP_EOL;
+			file_put_contents($file, $error, FILE_APPEND | LOCK_EX);
+		}
+	} catch (PDOException $e) {
+		$file = './errors.txt';
+		$error = date('Y-m-d H:i:s') . ' - Function: ' . __FUNCTION__ . ' - ' . $e->getMessage() . PHP_EOL;
+		file_put_contents($file, $error, FILE_APPEND | LOCK_EX);
+	}
+}
+
+/*
+ * Returns messages.
+ */
 function getMessage($message) {
 	switch ($message) {
 		case 'emailnotfound':

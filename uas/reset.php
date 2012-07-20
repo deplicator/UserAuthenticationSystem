@@ -1,6 +1,6 @@
 <?php 
 include '../header.php';
-include 'functions.php';
+
 $message = '';
 
 if(isset($_REQUEST['message'])) {
