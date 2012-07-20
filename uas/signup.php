@@ -33,7 +33,7 @@ if (isset($_REQUEST['email']) && isset($_REQUEST['password'])) {
         <div id="password">
             <label for="password">Password</label>
             <input type="password" name="password" id="pass1" onkeyup="checkPass(); return false;" />
-            <div class="test" id="pwstr"><a href="http://xkcd.com/936/" title="Bigger the better.">Password Entropy: <span>0</span> bits</a></div>
+            <div class="test" id="pwstr"><a href="http://xkcd.com/936/" title="Bigger the better.">Password Entropy: <span id="pwent">0</span> bits</a></div>
         </div>
 
         <div id="passwordconfirm">

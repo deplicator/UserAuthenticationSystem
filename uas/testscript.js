@@ -44,6 +44,12 @@ $(document).ready(function() {
 
     $('#password input').keyup(function() {
         $('#pwstr span').html(calculateEntropy($(this).val()));
+        if(calculateEntropy($(this).val()) > 100) {
+            document.getElementById('pwstr').firstChild.style.color = '#66cc66';
+        } else {
+            document.getElementById('pwstr').firstChild.style.color = '#ff6666';
+        }
+        
     });
     
 });
@@ -62,4 +68,19 @@ function checkPass() {
         document.getElementById('match').innerHTML = "Password fields must match.";
         document.getElementById('match').style.color = '#ff6666';
     }
+    
+    
 }
+
+/*
+ * Changes the color on the password entropy text.
+function checkEntropy() {
+    var entropy = document.getElementById('pwent').firstChild;
+    
+    if(entropy > 100) {
+        document.getElementById('pwstr').style.color = '#66cc66';
+    } else {
+        document.getElementById('pwstr').style.color = '#ff6666';
+    }
+
+}*/

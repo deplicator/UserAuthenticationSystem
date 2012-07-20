@@ -66,8 +66,9 @@
 	width: 148px;
 }
 
-.test {
+.test a{
     margin: -4px 0 0 3px;
+    color: black;
 }
 
 .test a:hover {
