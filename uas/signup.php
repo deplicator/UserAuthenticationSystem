@@ -39,7 +39,7 @@ if (isset($_REQUEST['email']) && isset($_REQUEST['password'])) {
         <div id="passwordconfirm">
             <label for="passwordconfirm">Confirm Password</label>
             <input type="password" name="passwordconfirm" id="pass2" onkeyup="checkPass(); return false;" />
-            <div class="test"><a href=""><span id="match"></span></a></div>
+            <div class="test"><a href=""><span id="match">Password fields must match.</span></a></div>
         </div>
         <input id="submit" type="submit" value="Submit"/>
     </form>

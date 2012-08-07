@@ -1,5 +1,4 @@
-User Authentication System
-==========================
+=User Authentication System=
 <tasks>
 [ ] double check email and reset functions
 [ ] Real time email availability and password checks.
@@ -12,7 +11,6 @@ User Authentication System
 [2] maybe: by default dreamhost doesn't support Blowfish, a hash option that doesn't require would be nice.
 <tasks>
 
-
 ==Goals==
 ===Simple===
 Being new to development, my code and thought process is simple. Part of the 
@@ -20,16 +18,15 @@ reason I'm doing this is to learn. Because this system meets my level of
 understanding, by default it is simple.
 
 ===Secure===
-Simple doesn't insecure. Passwords are salted and hashed with a bcrypt class 
-(credit and thanks to stackoverflow user Andrew Moore). Database inputs have 
-been sanitized to the best of my understanding.
+Simple doesn't mean insecure. Passwords are salted and hashed with a bcrypt 
+class (credit and thanks to stackoverflow user Andrew Moore). Database inputs 
+have been sanitized to the best of my understanding.
 
 This is a far from flawless. There are still plenty of security measures that 
 can be put in place.
 
 ===Expandable===
 This project is intended to be the foundation for other projects.
-
 
 ==MySQL Tables==
 (for reference)
@@ -59,7 +56,6 @@ only field required. User level's would probably go in this table too.
 
 ==Old Folder==
 Previous crude attempts I keep around for reference.
-
 
 ==Interesting Reading==
 * http://stackoverflow.com/questions/549/the-definitive-guide-to-forms-based-website-authentication/

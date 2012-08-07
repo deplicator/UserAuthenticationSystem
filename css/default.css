@@ -1,8 +1,12 @@
 @import url(reset.css);
 @import url(uas.css);
 
+h1 {
+    font-size: 1.5em;
+    margin: 10px;
+}
 
 footer {
-	font-size: .5em;
-	text-align: right;
+    font-size: .5em;
+    text-align: right;
 }
